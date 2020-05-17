@@ -1,0 +1,6 @@
+Django==3.0.6
+psycopg2-binary
+django-crispy-forms
+djangorestframework
+djangorestframework-jwt
+Pillow
