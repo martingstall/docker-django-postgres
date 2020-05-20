@@ -1,0 +1,25 @@
+{
+  "name": "docker-django-postgres",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jonjharrison/docker-django-postgres.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jonjharrison/docker-django-postgres/issues"
+  },
+  "homepage": "https://github.com/jonjharrison/docker-django-postgres#readme",
+  "dependencies": {
+    "@doubletrade/paper-datatable-api": "0.0.20"
+  },
+  "devDependencies": {
+    "snowpack": "^1.7.1"
+  }
+}
