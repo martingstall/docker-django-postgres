@@ -5,14 +5,23 @@ FROM python:3.8.1-slim-buster
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# set work directory
-WORKDIR /usr/src/app
-
 # copy project
 COPY . /usr/src/app/
 
 # install system dependencies
-RUN apt-get update && apt-get install -y netcat
+RUN apt-get update && apt-get install -y netcat wget
+
+#RUN apt install -y git-all
+#RUN apt-get install -y nodejs
+#RUN apt-get install -y npm
+#RUN npm install -g bower
+
+#RUN echo '{ "allow_root": true }' > /root/.bowerrc
+
+# set work directory
+WORKDIR /usr/src/app
+
+#RUN bower install iron-data-table
 
 # install dependencies
 RUN pip install --upgrade pip

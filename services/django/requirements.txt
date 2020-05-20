@@ -5,3 +5,5 @@ djangorestframework
 djangorestframework-jwt
 djangorestframework-csv
 Pillow
+requests
+cookies

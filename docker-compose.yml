@@ -3,6 +3,7 @@ version: '3.7'
 services:
   django:
     build: ./services/django
+    #image: nodejs
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./services/django/:/usr/src/app/
