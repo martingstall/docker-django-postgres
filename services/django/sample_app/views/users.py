@@ -8,7 +8,7 @@ from ..models.users import *
 
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
+    return render(request, 'sample_app/index.html')
 
 
 def create_perms(request):
