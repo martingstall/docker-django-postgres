@@ -11,10 +11,10 @@ template.innerHTML = `
 </style>
 <div class="table">
     <vaadin-grid>
-        <vaadin-grid-column path="name.first" header="First name"></vaadin-grid-column>
-        <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
-        <vaadin-grid-column path="location.city"></vaadin-grid-column>
-        <vaadin-grid-column path="location.team"</vaadin-grid-column>
+        <vaadin-grid-column path="name" header="Full Name"></vaadin-grid-column>
+        <vaadin-grid-column path="status" header="Status"></vaadin-grid-column>
+        <vaadin-grid-column path="origin.name" header="Origin"></vaadin-grid-column>
+        <vaadin-grid-column path="location.name" header="Current Location"</vaadin-grid-column>
         <vaadin-grid-column path="visitCount" text-align="end" width="120px" flex-grow="0"></vaadin-grid-column>
     </vaadin-grid>
 </div>
@@ -34,40 +34,11 @@ class SampleTable extends HTMLElement {
     }
 
     _renderTable() {
-        const users = [
-            {
-                "name": {
-                    "first": "Patrick",
-                    "last": "Marleau"
-                },
-                "location": {
-                    "city": "Pittsburgh",
-                    "team": "Penguins"
-                }
-            },
-            {
-                "name": {
-                    "first": "Brent",
-                    "last": "Burns"
-                },
-                "location": {
-                    "city": "San Jose",
-                    "team": "Sharks"
-                }
-            },
-            {
-                "name": {
-                    "first": "Brendon",
-                    "last": "Dillon"
-                },
-                "location": {
-                    "city": "Washington D.C.",
-                    "team": "Capitals"
-                }
-            }
-        ];
-
-        this.$table.items = users;
+        (async () => {
+            let response = await fetch('https://rickandmortyapi.com/api/character/');
+            let data = await response.json();
+            this.$table.items = data.results;
+        })();
     }
 }
 
