@@ -136,3 +136,6 @@ dmypy.json
 /.idea
 
 node_modules
+web_modules
+
+.vscode
