@@ -8,7 +8,8 @@ from ..models.users import *
 
 
 def index(request):
-    return render(request, 'sample_app/index.html')
+    #return render(request, 'sample_app/index.html')
+    return HttpResponse("Index")
 
 
 def create_perms(request):

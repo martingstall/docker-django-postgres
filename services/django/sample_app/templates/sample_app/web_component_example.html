@@ -1,0 +1,10 @@
+{% extends "sample_app/base.html" %}
+{% load static %}
+{% block content %}
+
+<p>HI THERE</p>
+<sample-item></sample-item>
+
+<script type="module" src="{% static 'app.js' %}"></script>
+
+{% endblock %}

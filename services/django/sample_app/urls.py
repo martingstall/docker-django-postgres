@@ -9,5 +9,5 @@ urlpatterns = [
 
     path('ae/', views.api_calls.test_ae, name='test_ae'),
     path('dc/', views.api_calls.test_dc, name='test_dc'),
-    path('web_component/', views.api_calls.web_component, name='web_component'),
+    path('normalization_example/', views.api_calls.normalization_example, name='normalization_example'),
 ]
