@@ -1,0 +1,5 @@
+{
+  "imports": {
+    "@vaadin/vaadin-grid/vaadin-grid.js": "./@vaadin/vaadin-grid/vaadin-grid.js"
+  }
+}

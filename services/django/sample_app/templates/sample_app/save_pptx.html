@@ -1,0 +1,9 @@
+{% extends "sample_app/base.html" %}
+{% block content %}
+
+<form method="POST" action="{% url 'save_pptx' %}">
+    <input type="text" name="test_1" value="">
+    <input type="submit" name="submit" value="Submit">
+</form>
+
+{% endblock %}

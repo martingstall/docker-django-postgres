@@ -7,7 +7,10 @@ urlpatterns = [
     path('list_users/', views.users.list_users, name='list_users'),
     path('create_perms/', views.users.create_perms, name='create_perms'),
 
-    path('ae/', views.api_calls.test_ae, name='test_ae'),
-    path('dc/', views.api_calls.test_dc, name='test_dc'),
-    path('normalization_example/', views.api_calls.normalization_example, name='normalization_example'),
+    #path('ae/', views.api_calls.test_ae, name='test_ae'),
+    #path('dc/', views.api_calls.test_dc, name='test_dc'),
+    #path('normalization_example/', views.api_calls.normalization_example, name='normalization_example'),
+
+    path('pptx/', views.pptx.index, name='index'),
+    path('save_pptx/', views.pptx.save_pptx, name='save_pptx'),
 ]

@@ -7,3 +7,4 @@ djangorestframework-csv
 Pillow
 requests
 cookies
+python-pptx
