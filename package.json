@@ -18,7 +18,8 @@
   },
   "homepage": "https://github.com/jonjharrison/docker-django-postgres#readme",
   "dependencies": {
-    "@vaadin/vaadin-grid": "^5.6.1"
+    "@vaadin/vaadin-grid": "^5.6.1",
+    "lit-element": "^2.3.1"
   },
   "devDependencies": {
     "snowpack": "^1.7.1"

@@ -1,0 +1,15 @@
+{% extends "sample_app/base.html" %}
+{% load static %}
+{% block content %}
+
+<sample-table
+    url="https://rickandmortyapi.com/api/character/"
+    cols="[
+        {key:'name', label:'Name'},
+        {key:'status', label:'Status'},
+    ]"
+></sample-table>
+
+<script type="module" src="{% static 'src/table.js' %}"></script>
+
+{% endblock %}
