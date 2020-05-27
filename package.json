@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "prepare": "snowpack --include services/django/sample_app/static/src/**/*.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,9 +18,15 @@
   },
   "homepage": "https://github.com/jonjharrison/docker-django-postgres#readme",
   "dependencies": {
-    "@doubletrade/paper-datatable-api": "0.0.20"
+    "@vaadin/vaadin-grid": "^5.6.1"
   },
   "devDependencies": {
     "snowpack": "^1.7.1"
+  },
+  "snowpack": {
+    "homepage": "static",
+    "installOptions": {
+      "dest": "./services/django/sample_app/static/web_modules"
+    }
   }
 }

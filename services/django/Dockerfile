@@ -23,6 +23,12 @@ WORKDIR /usr/src/app
 
 #RUN bower install iron-data-table
 
+RUN apt-get install -y nodejs
+RUN apt-get install -y npm
+
+# How to use this here?
+#RUN npm install
+
 # install dependencies
 RUN pip install --upgrade pip
 COPY ./requirements.txt /usr/src/app/requirements.txt
