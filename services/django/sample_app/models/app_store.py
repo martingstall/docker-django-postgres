@@ -5,10 +5,11 @@ from django.db import models
 
 
 class App(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.AutoField("ID", primary_key=True)
     app_name = models.CharField("App Name", max_length=255, null=False, blank=False)
     app_desc = models.CharField("App Description", max_length=255, null=False, blank=False)
-    data_structure = JSONField("Data Structure", default=dict, null=True, blank=True)
+    data_structure = JSONField("Data Structure", default=dict)
+    #app_structure = models.TextField("App Structure", null=True, blank=True)
     display_structure = models.TextField("Display Structure", null=True, blank=True)
 
     class Meta:
