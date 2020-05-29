@@ -8,14 +8,26 @@
 <form id="campaign_step">
     {% csrf_token %}
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-4">
             <label>
                 Textarea #1
                 <br/>
                 <textarea name="textarea_1" id="textarea_1"></textarea>
             </label>
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-4">
+            <label>
+                Select #2
+                <br/>
+                <select multiple name="select_2" id="select_2">
+                    <option>- select -</option>
+                    <option value="Cat">Cat</option>
+                    <option value="Dog">Dog</option>
+                    <option value="Bird">Bird</option>
+                </select>
+            </label>
+        </div>
+        <div class="col-lg-4">
             <div class="row">
                 <div class="col-lg-12">
                     <label>
@@ -64,11 +76,43 @@
 
         $saveButton.on('click', function () {
             let payload = $step.serialize();
-            console.log(payload)
-            $.post("{% url 'save_step_data' campaign.id cf_step.id %}", payload, function (data) {
-                console.log(data)
-            });
 
+            $.ajax({
+                url: "{% url 'save_step_data' campaign.id cf_step.id %}",
+                type: "POST",
+                //data: JSON.stringify($step.serializeArray()),
+                //data: $step.serializeArray(),
+                data: JSON.stringify($step.serialize()),
+                //data: $step.serialize(),
+                //processData: false,
+                //contentType: false,
+                //cache: false,
+                //contentType: 'application/json; charset=utf-8',
+                //dataType: 'json',
+                //data: JSON.stringify(payload),
+                //data: {'data': payload},
+                //processData: false,
+                beforeSend: function() {
+                },
+                success: function(data) {
+                    console.log(data)
+                },
+                error : function(xhr, errmsg, err) {
+                    console.log(xhr.status + ": " + xhr.responseText);
+                }
+            });
+            /*
+            console.log(payload)
+            $.post(
+                "{% url 'save_step_data' campaign.id cf_step.id %}",
+                payload,
+                function (data) {
+                    console.log(data)
+                },
+                'json'
+            );
+
+             */
             return false;
         });
     });

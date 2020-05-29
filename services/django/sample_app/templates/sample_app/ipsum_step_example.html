@@ -43,16 +43,7 @@
                     </label>
                 </div>
                 <div class="col-lg-12">
-                    <label>
-                        Select #2
-                        <br/>
-                        <select multiple name="select_2" id="select_2">
-                            <option>- select -</option>
-                            <option value="Cat">Cat</option>
-                            <option value="Dog">Dog</option>
-                            <option value="Bird">Bird</option>
-                        </select>
-                    </label>
+
                 </div>
             </div>
         </div>
@@ -80,8 +71,6 @@
         let $saveButton = $('#save_step');
         let jsonObject = JSON.parse('{{ campaign_step_data | escapejs }}');
 
-        console.log(jsonObject)
-
         for (let key in jsonObject) {
             if (jsonObject.hasOwnProperty(key)) {
                 //console.log(key + " -> " + jsonObject[key]);
@@ -89,8 +78,6 @@
 
                 if ($step.find($field).prop('multiple') === true) {
                     let $select = $step.find($field);
-
-                    console.log("SDFCDSFDSFDS")
                     $step.find($field).val(jsonObject[key])
                 } else {
                     $step.find($field).val(jsonObject[key])
@@ -100,9 +87,6 @@
 
         $saveButton.on('click', function () {
             let payload = $step.serialize();
-            console.log("WTF")
-            console.log(payload)
-            console.log("=============")
             $.post("{% url 'save_step_data' campaign.id cf_step.id %}", payload, function (data) {
                 console.log(data)
             });

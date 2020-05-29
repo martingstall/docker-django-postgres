@@ -5,6 +5,7 @@ import datetime
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.template import RequestContext, loader
+from django.views.decorators.csrf import csrf_exempt
 
 from ..models.campaign import *
 from ..models.campaign_framework import *
@@ -73,6 +74,7 @@ def view_step(request, campaign_id, cf_step_id):
     return HttpResponse(template.render(data, request))
 
 
+@csrf_exempt
 def save_step_data(request, campaign_id, cf_step_id):
     """
 
@@ -88,21 +90,14 @@ def save_step_data(request, campaign_id, cf_step_id):
     data = {
         "status": "success"
     }
-    try:
-        raw = json.dumps(request.POST)
-        clean = json.loads(raw)
-        clean.pop('csrfmiddlewaretoken', None)
-        print ("")
-        print ("")
-        print (clean)
-        print ("")
-        print ("")
 
+    try:
+        a = json.dumps(request.POST)
         step = CampaignStepData.objects.get(
             campaign_id=campaign_id,
             campaign_framework_step_id=cf_step_id
         )
-        step.campaign_step_data = clean
+        step.campaign_step_data = json.loads(a)
         step.save()
 
     except Exception as e:
