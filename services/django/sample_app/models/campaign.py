@@ -38,5 +38,5 @@ class CampaignStepData(models.Model):
 
     class Meta:
         app_label = 'sample_app'
-        db_table = 'campaign_steps'
+        db_table = 'campaign_step_data'
         unique_together = (('campaign','campaign_framework_step'),)

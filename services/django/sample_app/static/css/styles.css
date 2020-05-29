@@ -3,3 +3,21 @@ body {
    font-size: 12px;
    line-height: 120%;
 }
+
+form label:first-child {
+   font-weight: bold !important;
+   padding: 0 !important;
+}
+form textarea {
+   width: 100%;
+}
+
+.help-tooltip {
+   display: inline-block;
+   text-align: center;
+   width: 14px;
+   height: 14px;
+   border-radius: 50%;
+   background-color: #000;
+   color: #fff;
+}

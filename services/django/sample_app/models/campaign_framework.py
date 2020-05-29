@@ -38,7 +38,8 @@ class CampaignFrameworkStep(models.Model):
     )
     name = models.CharField("Step Name", max_length=255, null=False, blank=False)
     description = models.TextField("Description", null=True, blank=True)
-    layout = models.CharField("HTML", max_length=255, null=False, blank=False)
+    html_layout = models.CharField("HTML", max_length=255, null=False, blank=False)
+    json_layout = JSONField("Campaign Step Data", default=dict)
 
     class Meta:
         app_label = 'sample_app'

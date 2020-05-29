@@ -21,18 +21,23 @@ def create_example(request):
     """
     try:
         campaign = Campaign()
-        campaign.campaign_framework_id = 1
+        campaign.campaign_framework_id = 2
         campaign.name = "Campaign Example 1"
         campaign.save()
 
         campaign_step_data = CampaignStepData()
         campaign_step_data.campaign_id = campaign.id
-        campaign_step_data.campaign_framework_step_id = 1
+        campaign_step_data.campaign_framework_step_id = 3
         campaign_step_data.save()
 
         campaign_step_data = CampaignStepData()
         campaign_step_data.campaign_id = campaign.id
-        campaign_step_data.campaign_framework_step_id = 2
+        campaign_step_data.campaign_framework_step_id = 4
+        campaign_step_data.save()
+
+        campaign_step_data = CampaignStepData()
+        campaign_step_data.campaign_id = campaign.id
+        campaign_step_data.campaign_framework_step_id = 5
         campaign_step_data.save()
 
         return HttpResponse("Created")
@@ -62,15 +67,15 @@ def view_step(request, campaign_id, cf_step_id):
         campaign_framework_step_id=cf_step.id
     )
     campaign_step_data = campaign_step.campaign_step_data
-    #print ("campaign_step_data.get('app_1'): " , campaign_step_data.get('app_1'))
 
     data = {
         "campaign": campaign,
         "cf_step": cf_step,
+        "json_layout": json.dumps(cf_step.json_layout),
         "campaign_step_data": json.dumps(campaign_step_data),
         "which_normalization_example": campaign_step_data.get('app_1')
     }
-    template = loader.get_template("sample_app/" + cf_step.layout)
+    template = loader.get_template("sample_app/" + cf_step.html_layout)
     return HttpResponse(template.render(data, request))
 
 

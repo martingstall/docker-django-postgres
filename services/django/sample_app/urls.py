@@ -19,6 +19,7 @@ urlpatterns = [
     path('campaign/<int:campaign_id>/step/<int:cf_step_id>/save/', views.campaign.save_step_data, name='save_step_data'),
 
     path('cf/create_example/', views.campaign_framework.create_example, name='create_example'),
+    path('cf/update_example/', views.campaign_framework.update_example, name='update_example'),
 
     path('campaign/create_example/', views.campaign.create_example, name='create_example'),
 

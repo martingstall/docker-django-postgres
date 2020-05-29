@@ -1,0 +1,64 @@
+{% extends "sample_app/base.html" %}
+{% load static %}
+{% block content %}
+
+<style>
+    .css-grid-container {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+    }
+
+    .aaa {
+        grid-column: span 4;
+    }
+
+    .bbb {
+        grid-column: span 8;
+    }
+
+    @media screen and (max-width: 768px) {
+        .aaa {
+            grid-column: span 6;
+        }
+
+        .bbb {
+            grid-column: span 6;
+        }
+    }
+
+    @media screen and (max-width: 480px) {
+        .aaa {
+            grid-column: span 12;
+        }
+
+        .bbb {
+            grid-column: span 12;
+        }
+    }
+</style>
+
+<h1>{{ cf_step.name }}</h1>
+<hr/>
+
+<form id="campaign_step" action="{% url 'save_step_data' campaign.id cf_step.id %}">
+    {% csrf_token %}
+    <div class="css-grid-container">
+        <div class="aaa">
+            <label>Field #1</label>
+            <input type="text" name="field_1" id="field_1" value=""/>
+        </div>
+        <div class="bbb">
+            <label>Field #2</label>
+            <input type="text" name="field_2" id="field_2" value=""/>
+        </div>
+    </div>
+    <hr/>
+    <button id="save_step">Save</button>
+</form>
+
+<script>
+let jsonObject = JSON.parse('{{ campaign_step_data | escapejs }}');
+</script>
+<script type="module" src="{% static 'src/process_step_data.js' %}"></script>
+
+{% endblock %}

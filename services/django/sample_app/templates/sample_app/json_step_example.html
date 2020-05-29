@@ -1,0 +1,99 @@
+{% extends "sample_app/base.html" %}
+{% load static %}
+{% block content %}
+
+<h1>{{ cf_step.name }}</h1>
+<hr/>
+
+<form id="campaign_step" action="{% url 'save_step_data' campaign.id cf_step.id %}">
+    {% csrf_token %}
+    <div class="row"></div>
+    <hr/>
+    <button id="save_step">Save</button>
+</form>
+
+<script>
+let jsonObject = JSON.parse('{{ campaign_step_data | escapejs }}');
+let layoutObject = JSON.parse('{{ json_layout | escapejs }}');
+
+$(function () {
+    let $form = $('#campaign_step');
+    let $row = $form.find('.row');
+
+    $.each(layoutObject['bootstrap_columns'], function (key, value) {
+        let $col = $('<div>');
+        let $label = $('<label>');
+        let $input = $('<input>');
+        let $select = $('<select>');
+        let $textarea = $('<textarea>');
+        let $tooltip = $('<i>', {'class':'help-tooltip'}).attr('data-toggle', 'tooltip').text('?');
+
+        $col.addClass(value.class);
+        $col.append($label.text(value.label));
+        if (value.tooltip) {
+            $tooltip.attr({
+                'data-placement': value.tooltip.placement,
+                'title': value.tooltip.title,
+            });
+            $label.append($tooltip);
+        }
+
+        if (value.field_type === "input") {
+            $input.attr({
+                'name': value.name,
+                'id': value.name,
+                'type': value.input_type,
+                'placeholder': value.placeholder
+            });
+            $row.append($col.append($input));
+            return true;
+        }
+
+        if (value.field_type === "radio") {
+            $.each(value.options, function (opt_key, opt_value) {
+                let $radioInput = $('<input>', {'type':'radio', 'name':value.name, 'value':opt_value.value});
+                let $radioLabel = $('<label>');
+
+                $radioLabel.text(opt_value.label);
+                $radioLabel.append($radioInput);
+
+                $col.append($radioLabel)
+            });
+            $row.append($col);
+            return true;
+        }
+
+        if (value.field_type === "select") {
+            $select.attr({
+                'name': value.name,
+                'id': value.name,
+            });
+
+            $.each(value.options, function (opt_key, opt_value) {
+                let $option = $('<option>');
+                $option.attr('value', opt_value.value).text(opt_value.label);
+                $select.append($option);
+            });
+
+            $row.append($col.append($select));
+            return true;
+        }
+
+        if (value.field_type === "textarea") {
+            $textarea.attr({
+                'name': value.name,
+                'id': value.name,
+            });
+            $row.append($col.append($textarea));
+            return true;
+        }
+    });
+});
+
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+});
+</script>
+<script type="module" src="{% static 'src/process_step_data.js' %}"></script>
+
+{% endblock %}

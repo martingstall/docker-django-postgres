@@ -1,0 +1,57 @@
+{% extends "sample_app/base.html" %}
+{% load static %}
+{% block content %}
+
+<h1>{{ cf_step.name }}</h1>
+<hr/>
+
+<form id="campaign_step" action="{% url 'save_step_data' campaign.id cf_step.id %}">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-sm-4">
+            <label>Text Field #1</label>
+            <input type="text" name="field_1" id="field_1" value=""/>
+        </div>
+        <div class="col-sm-4">
+            <label>
+                Number Field #1
+                <i class="help-tooltip" data-toggle="tooltip" data-placement="top" title="Tooltip on top">?</i>
+            </label>
+            <input type="number" name="field_2" id="field_2" value=""/>
+        </div>
+        <div class="col-sm-4">
+            <label>Date Field #1</label>
+            <input type="date" name="field_3" id="field_3" value=""/>
+        </div>
+        <div class="col-sm-4">
+            <label>Select #1</label>
+            <select name="select_1" id="select_1">
+                <option>- select -</option>
+                <option value="Lorum">Lorum</option>
+                <option value="Ipsum">Ipsum</option>
+            </select>
+        </div>
+        <div class="col-sm-6">
+            <label>Textarea #1</label>
+            <br/>
+            <textarea name="textarea_1" placeholder="Please enter stuff" id="textarea_1"></textarea>
+        </div>
+        <div class="col-sm-6">
+            <label>Radios #1</label>
+            <label><input type="radio" name="radio_1" id="radio_11" value="aaa"/> aaa</label>
+            <label><input type="radio" name="radio_1" id="radio_12" value="bbb"/> bbb</label>
+        </div>
+    </div>
+    <hr/>
+    <button id="save_step">Save</button>
+</form>
+
+<script>
+let jsonObject = JSON.parse('{{ campaign_step_data | escapejs }}');
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+});
+</script>
+<script type="module" src="{% static 'src/process_step_data.js' %}"></script>
+
+{% endblock %}
