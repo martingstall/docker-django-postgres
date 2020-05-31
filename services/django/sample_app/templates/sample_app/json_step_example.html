@@ -7,8 +7,18 @@
 
 <form id="campaign_step" action="{% url 'save_step_data' campaign.id cf_step.id %}">
     {% csrf_token %}
-    <div class="row"></div>
+    <div id="layout"></div>
     <hr/>
+    {% if cf_step.id == 6 %}
+        <a href="{% url 'view_step' campaign.id 7 %}">Next >></a>
+    {% endif%}
+    {% if cf_step.id == 7 %}
+        <a href="{% url 'view_step' campaign.id 6 %}"><< Back</a>
+        <a href="{% url 'view_step' campaign.id 8 %}">Next >></a>
+    {% endif%}
+    {% if cf_step.id == 8 %}
+        <a href="{% url 'view_step' campaign.id 7 %}"><< Back</a>
+    {% endif%}
     <button id="save_step">Save</button>
 </form>
 
@@ -18,75 +28,85 @@ let layoutObject = JSON.parse('{{ json_layout | escapejs }}');
 
 $(function () {
     let $form = $('#campaign_step');
-    let $row = $form.find('.row');
+    let $layout = $form.find('#layout');
 
-    $.each(layoutObject['bootstrap_columns'], function (key, value) {
-        let $col = $('<div>');
-        let $label = $('<label>');
-        let $input = $('<input>');
-        let $select = $('<select>');
-        let $textarea = $('<textarea>');
-        let $tooltip = $('<i>', {'class':'help-tooltip'}).attr('data-toggle', 'tooltip').text('?');
+    $.each(layoutObject['rows'], function (row_key, row) {
+        let $row = $('<div>', {'class':'row'});
 
-        $col.addClass(value.class);
-        $col.append($label.text(value.label));
-        if (value.tooltip) {
-            $tooltip.attr({
-                'data-placement': value.tooltip.placement,
-                'title': value.tooltip.title,
-            });
-            $label.append($tooltip);
-        }
+        $layout.append($row);
 
-        if (value.field_type === "input") {
-            $input.attr({
-                'name': value.name,
-                'id': value.name,
-                'type': value.input_type,
-                'placeholder': value.placeholder
-            });
-            $row.append($col.append($input));
-            return true;
-        }
+        $.each(row.columns, function (col_key, column) {
+            let $col = $('<div>');
+            let $label = $('<label>');
+            let $input = $('<input>');
+            let $select = $('<select>');
+            let $textarea = $('<textarea>');
+            let $tooltip = $('<i>', {'class':'help-tooltip'}).attr('data-toggle', 'tooltip').text('?');
 
-        if (value.field_type === "radio") {
-            $.each(value.options, function (opt_key, opt_value) {
-                let $radioInput = $('<input>', {'type':'radio', 'name':value.name, 'value':opt_value.value});
-                let $radioLabel = $('<label>');
+            $col.addClass(column.class);
 
-                $radioLabel.text(opt_value.label);
-                $radioLabel.append($radioInput);
+            $col.append($label.text(column.label));
+            if (column.label_position === "top") {
+                $label.after($('<br>'));
+            }
 
-                $col.append($radioLabel)
-            });
-            $row.append($col);
-            return true;
-        }
+            if (column.tooltip) {
+                $tooltip.attr({
+                    'data-placement': column.tooltip.placement,
+                    'title': column.tooltip.title,
+                });
+                $label.append($tooltip);
+            }
 
-        if (value.field_type === "select") {
-            $select.attr({
-                'name': value.name,
-                'id': value.name,
-            });
+            if (column.field_type === "input") {
+                $input.attr({
+                    'name': column.name,
+                    'id': column.name,
+                    'type': column.input_type,
+                    'placeholder': column.placeholder
+                });
+                $row.append($col.append($input));
+                return true;
+            }
 
-            $.each(value.options, function (opt_key, opt_value) {
-                let $option = $('<option>');
-                $option.attr('value', opt_value.value).text(opt_value.label);
-                $select.append($option);
-            });
+            if (column.field_type === "radio") {
+                $.each(column.options, function (radio_key, radio) {
+                    let $radioInput = $('<input>', {'type':'radio', 'name':column.name, 'value':radio.value});
+                    let $radioLabel = $('<label>');
 
-            $row.append($col.append($select));
-            return true;
-        }
+                    $radioLabel.text(radio.label);
+                    $radioLabel.prepend($radioInput);
+                    $col.append($radioLabel)
+                });
+                $row.append($col);
+                return true;
+            }
 
-        if (value.field_type === "textarea") {
-            $textarea.attr({
-                'name': value.name,
-                'id': value.name,
-            });
-            $row.append($col.append($textarea));
-            return true;
-        }
+            if (column.field_type === "select") {
+                $select.attr({
+                    'name': column.name,
+                    'id': column.name,
+                });
+
+                $.each(column.options, function (select_key, select) {
+                    let $option = $('<option>');
+                    $option.attr('value', select.value).text(select.label);
+                    $select.append($option);
+                });
+
+                $row.append($col.append($select));
+                return true;
+            }
+
+            if (column.field_type === "textarea") {
+                $textarea.attr({
+                    'name': column.name,
+                    'id': column.name,
+                });
+                $row.append($col.append($textarea));
+                return true;
+            }
+        });
     });
 });
 

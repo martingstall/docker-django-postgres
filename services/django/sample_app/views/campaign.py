@@ -7,43 +7,36 @@ from django.shortcuts import render
 from django.template import RequestContext, loader
 from django.views.decorators.csrf import csrf_exempt
 
+from pptx import Presentation
+from pptx.util import Inches
+
 from ..models.campaign import *
 from ..models.campaign_framework import *
 
 
-def create_example(request):
+def campaign_details(request, campaign_id):
     """
 
     :param request:
     :type request:
+    :param campaign_id:
+    :type campaign_id:
     :return:
     :rtype:
     """
-    try:
-        campaign = Campaign()
-        campaign.campaign_framework_id = 2
-        campaign.name = "Campaign Example 1"
-        campaign.save()
+    campaign = Campaign.objects.get(pk=campaign_id)
+    steps = CampaignFrameworkStep.objects.filter(
+        phase_id__in=CampaignFrameworkPhase.objects.filter(
+            campaign_framework_id = campaign.campaign_framework_id
+        )
+    )
 
-        campaign_step_data = CampaignStepData()
-        campaign_step_data.campaign_id = campaign.id
-        campaign_step_data.campaign_framework_step_id = 3
-        campaign_step_data.save()
-
-        campaign_step_data = CampaignStepData()
-        campaign_step_data.campaign_id = campaign.id
-        campaign_step_data.campaign_framework_step_id = 4
-        campaign_step_data.save()
-
-        campaign_step_data = CampaignStepData()
-        campaign_step_data.campaign_id = campaign.id
-        campaign_step_data.campaign_framework_step_id = 5
-        campaign_step_data.save()
-
-        return HttpResponse("Created")
-
-    except Exception as e:
-        return HttpResponse(e)
+    data = {
+        "campaign": campaign,
+        "steps": steps
+    }
+    template = loader.get_template("sample_app/campaign_detail.html")
+    return HttpResponse(template.render(data, request))
 
 
 def view_step(request, campaign_id, cf_step_id):
@@ -97,12 +90,12 @@ def save_step_data(request, campaign_id, cf_step_id):
     }
 
     try:
-        a = json.dumps(request.POST)
+        form_data = json.dumps(request.POST)
         step = CampaignStepData.objects.get(
             campaign_id=campaign_id,
             campaign_framework_step_id=cf_step_id
         )
-        step.campaign_step_data = json.loads(a)
+        step.campaign_step_data = json.loads(form_data)
         step.save()
 
     except Exception as e:
@@ -115,6 +108,69 @@ def save_step_data(request, campaign_id, cf_step_id):
         json.dumps(data),
         content_type="application/json"
     )
+
+
+def create_campaign_pptx(request, campaign_id):
+    """
+
+    :param request:
+    :type request:
+    :param campaign_id:
+    :type campaign_id:
+    :return:
+    :rtype:
+    """
+    campaign = Campaign.objects.get(pk=campaign_id)
+    cf_steps = CampaignFrameworkStep.objects.filter(
+        phase_id__in=CampaignFrameworkPhase.objects.filter(
+            campaign_framework_id=campaign.campaign_framework_id
+        )
+    )
+
+    filename = "OmniTemplateTest.pptx"
+    prs = Presentation(filename)
+
+    intro_slide = prs.slides.get(prs.slides[0].slide_id)
+    intro_slide.shapes.title.text = campaign.name
+    intro_slide.placeholders[1].text = "Campaign description here..."
+
+    slide_template = prs.slide_layouts[8]
+    for cf_step in cf_steps:
+        slide = prs.slides.add_slide(slide_template)
+        slide.shapes.title.text = cf_step.name
+
+        campaign_step = CampaignStepData.objects.get(
+            campaign_id=campaign.id,
+            campaign_framework_step_id=cf_step.id
+        )
+        campaign_step_data = campaign_step.campaign_step_data
+
+        top = 1.5
+        height = 1
+        for row in cf_step.json_layout.get('rows'):
+            left = 0.5
+            for col in row.get('columns'):
+                try:
+                    width = int(col.get('class').replace('col-sm-', ''))
+                except Exception as e:
+                    print ("Couldn't determine width: ", e)
+                    width = 1
+                label = col.get('label')
+                value = campaign_step_data[col.get('name')]
+                text_box = slide.shapes.add_textbox(
+                    Inches(left),
+                    Inches(top),
+                    Inches(width),
+                    Inches(height)
+                )
+                text_box.text_frame.text = label + ": " + str(value)
+                left = left + width
+
+            top = top + 0.5
+
+    prs.save(campaign.name + ".pptx")
+
+    return HttpResponse("Created")
 
 
 def lit_table_example(request):

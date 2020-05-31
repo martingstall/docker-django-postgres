@@ -18,6 +18,7 @@ class CampaignFrameworkPhase(models.Model):
     id = models.AutoField("id", primary_key=True)
     campaign_framework = models.ForeignKey("CampaignFramework", on_delete=models.CASCADE)
     name = models.CharField("Name", max_length=255, null=False, blank=False)
+    order = models.PositiveSmallIntegerField(verbose_name="Order", null=False, blank=False, default=1)
     description = models.TextField("Description", null=True, blank=True)
 
     class Meta:
@@ -37,6 +38,7 @@ class CampaignFrameworkStep(models.Model):
         on_delete=models.CASCADE
     )
     name = models.CharField("Step Name", max_length=255, null=False, blank=False)
+    order = models.PositiveSmallIntegerField(verbose_name="Order", null=False, blank=False, default=1)
     description = models.TextField("Description", null=True, blank=True)
     html_layout = models.CharField("HTML", max_length=255, null=False, blank=False)
     json_layout = JSONField("Campaign Step Data", default=dict)

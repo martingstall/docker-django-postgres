@@ -6,7 +6,6 @@ $(function () {
     let $saveButton = $('#save_step');
 
     for (let key in jsonObject) {
-        //let $field = $form.find('#' + key);
         let $field = $form.find('[name="' + key + '"]');
 
         if (!$field) {

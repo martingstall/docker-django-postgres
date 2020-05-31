@@ -1,0 +1,18 @@
+{% extends "sample_app/base.html" %}
+{% load static %}
+{% block content %}
+
+<h1>{{ campaign.name }}</h1>
+<hr/>
+<ul>
+{% for step in steps %}
+    <li>
+        <a href="{% url 'view_step' campaign.id step.id %}">{{ step.name }}</a>
+    </li>
+{% endfor %}
+</ul>
+
+<hr />
+<a href="{% url 'create_campaign_pptx' campaign.id %}" class="btn btn-primary" id="save_step">Generate PowerPoint</a>
+
+{% endblock %}

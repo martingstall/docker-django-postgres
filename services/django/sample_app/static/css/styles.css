@@ -6,7 +6,6 @@ body {
 
 form label:first-child {
    font-weight: bold !important;
-   padding: 0 !important;
 }
 form textarea {
    width: 100%;
@@ -20,4 +19,13 @@ form textarea {
    border-radius: 50%;
    background-color: #000;
    color: #fff;
+}
+
+#campaign_step {
+
+}
+#campaign_step label {
+   display: inline-block;
+   padding: 0 12px 0 0 !important;
+   margin: 0;
 }
