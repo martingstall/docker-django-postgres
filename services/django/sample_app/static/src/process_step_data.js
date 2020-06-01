@@ -3,7 +3,6 @@
  */
 $(function () {
     let $form = $('#campaign_step');
-    let $saveButton = $('#save_step');
 
     for (let key in jsonObject) {
         let $field = $form.find('[name="' + key + '"]');
@@ -23,7 +22,7 @@ $(function () {
         }
     }
 
-    $saveButton.on('click', function () {
+    $form.on('submit', function () {
         let payload = $form.serialize();
 
         $.post($form.attr('action'), payload, function (data) {

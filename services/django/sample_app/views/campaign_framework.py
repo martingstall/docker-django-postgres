@@ -123,7 +123,7 @@ def update_example(request):
                 "columns": [
 
                     {
-                        "class": "col-sm-3",
+                        "class": "col-sm-4",
                         "field_type": "select",
                         "multiple": False,
                         "name": "select_1",

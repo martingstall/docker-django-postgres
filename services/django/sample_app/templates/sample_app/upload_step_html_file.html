@@ -1,0 +1,11 @@
+{% extends "sample_app/base.html" %}
+{% load static %}
+{% block content %}
+
+<form action="{% url 'upload_step_html_file' 4 3 %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="html_file">
+    <input type="submit" value="submit" />
+</form>
+
+{% endblock %}

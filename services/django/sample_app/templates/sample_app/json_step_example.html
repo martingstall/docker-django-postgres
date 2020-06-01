@@ -19,7 +19,7 @@
     {% if cf_step.id == 8 %}
         <a href="{% url 'view_step' campaign.id 7 %}"><< Back</a>
     {% endif%}
-    <button id="save_step">Save</button>
+    <button>Save</button>
 </form>
 
 <script>
@@ -56,6 +56,10 @@ $(function () {
                     'title': column.tooltip.title,
                 });
                 $label.append($tooltip);
+            }
+
+            if (column.required) {
+                $input.prop('required', true);
             }
 
             if (column.field_type === "input") {
