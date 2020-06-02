@@ -121,7 +121,6 @@ def update_example(request):
             },
             {
                 "columns": [
-
                     {
                         "class": "col-sm-4",
                         "field_type": "select",
@@ -155,6 +154,28 @@ def update_example(request):
                             {
                                 "value": "bbb",
                                 "label": "These are B's"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "columns": [
+                    {
+                        "class": "col-sm-12",
+                        "field_type": "select",
+                        "multiple": True,
+                        "name": "audiences",
+                        "label": "Audiences",
+                        "required": False,
+                        "options": [
+                            {
+                                "value": "lorum",
+                                "label": "Lorum"
+                            },
+                            {
+                                "value": "ipsum",
+                                "label": "Ipsum"
                             }
                         ]
                     }
