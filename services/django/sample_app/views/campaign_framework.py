@@ -134,6 +134,10 @@ def update_example(request):
                                 "label": "Lorum"
                             },
                             {
+                                "value": "alpha",
+                                "label": "Alpha"
+                            },
+                            {
                                 "value": "ipsum",
                                 "label": "Ipsum"
                             }
@@ -164,7 +168,7 @@ def update_example(request):
                     {
                         "class": "col-sm-12",
                         "field_type": "select",
-                        "multiple": True,
+                        "multiple": False,
                         "name": "audiences",
                         "label": "Audiences",
                         "required": False,
@@ -192,7 +196,7 @@ def update_example(request):
         ]
     }
 
-    json_layout = {
+    json_layout_xxxx = {
         "rows": [
             {
                 "columns": [
@@ -229,7 +233,7 @@ def update_example(request):
         ]
     }
 
-    json_layout = {
+    json_layout_cdddd = {
         "rows": [
             {
                 "columns": [

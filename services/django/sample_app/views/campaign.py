@@ -35,7 +35,7 @@ def campaign_details(request, campaign_id):
         phase_id__in=CampaignFrameworkPhase.objects.filter(
             campaign_framework_id = campaign.campaign_framework_id
         )
-    )
+    ).order_by('order')
 
     data = {
         "campaign": campaign,
@@ -63,11 +63,14 @@ def view_step(request, campaign_id, cf_step_id):
         pk=cf_step_id
     )
 
-    campaign_step = CampaignStepData.objects.get(
-        campaign_id=campaign.id,
-        campaign_framework_step_id=cf_step.id
-    )
-    campaign_step_data = campaign_step.campaign_step_data
+    try:
+        campaign_step = CampaignStepData.objects.get(
+            campaign_id=campaign.id,
+            campaign_framework_step_id=cf_step.id
+        )
+        campaign_step_data = campaign_step.campaign_step_data
+    except:
+        campaign_step_data = {}
 
     previous_steps = CampaignFrameworkStep.objects.values_list('pk', flat=True).filter(
         phase_id__in=CampaignFrameworkPhase.objects.only('pk').filter(
@@ -111,6 +114,12 @@ def save_step_data(request, campaign_id, cf_step_id):
 
     try:
         form_data = json.dumps(request.POST)
+        print ("")
+        print ("")
+        print (request.POST.getlist('select_1'))
+        print ("")
+        print ("")
+
         step = CampaignStepData.objects.get(
             campaign_id=campaign_id,
             campaign_framework_step_id=cf_step_id
@@ -175,16 +184,20 @@ def create_campaign_pptx(request, campaign_id):
                 except Exception as e:
                     print ("Couldn't determine width: ", e)
                     width = 1
-                label = col.get('label')
-                value = campaign_step_data[col.get('name')]
-                text_box = slide.shapes.add_textbox(
-                    Inches(left),
-                    Inches(top),
-                    Inches(width),
-                    Inches(height)
-                )
-                text_box.text_frame.text = label + ": " + str(value)
-                left = left + width
+
+                try:
+                    label = col.get('label')
+                    value = campaign_step_data[col.get('name')]
+                    text_box = slide.shapes.add_textbox(
+                        Inches(left),
+                        Inches(top),
+                        Inches(width),
+                        Inches(height)
+                    )
+                    text_box.text_frame.text = label + ": " + str(value)
+                    left = left + width
+                except:
+                    continue
 
             top = top + 0.5
 
