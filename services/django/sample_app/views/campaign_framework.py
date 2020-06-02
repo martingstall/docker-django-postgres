@@ -168,16 +168,14 @@ def update_example(request):
                         "name": "audiences",
                         "label": "Audiences",
                         "required": False,
-                        "options": [
-                            {
-                                "value": "lorum",
-                                "label": "Lorum"
-                            },
-                            {
-                                "value": "ipsum",
-                                "label": "Ipsum"
+                        "api": {
+                            "system_key": "audience_explorer",
+                            "endpoint": "audience_list",
+                            "return": {
+                                "value": "guid_audience",
+                                "label": "audience_name"
                             }
-                        ]
+                        }
                     }
                 ]
             },
@@ -194,8 +192,18 @@ def update_example(request):
         ]
     }
 
-    json_layoutsfsa = {
+    json_layout = {
         "rows": [
+            {
+                "columns": [
+                    {
+                        "class": "col-sm-12",
+                        "field_type": "persisted_data",
+                        "name": "audiences",
+                        "label": "Audience ID From Previous Step"
+                    }
+                ]
+            },
             {
                 "columns": [
                     {
@@ -221,8 +229,18 @@ def update_example(request):
         ]
     }
 
-    json_layoutasdsa = {
+    json_layout = {
         "rows": [
+            {
+                "columns": [
+                    {
+                        "class": "col-sm-12",
+                        "field_type": "persisted_data",
+                        "name": "audiences",
+                        "label": "Audience ID From Previous Step"
+                    }
+                ]
+            },
             {
                 "columns": [
                     {

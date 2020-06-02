@@ -1,4 +1,5 @@
 import json
+import requests
 import time
 import datetime
 
@@ -15,6 +16,8 @@ from pptx.util import Inches
 
 from ..models.campaign import *
 from ..models.campaign_framework import *
+
+from ..data_connections.factory import Factory as DataConnFactory
 
 
 def campaign_details(request, campaign_id):
@@ -55,20 +58,34 @@ def view_step(request, campaign_id, cf_step_id):
     :rtype:
     """
     campaign = Campaign.objects.get(pk=campaign_id)
+
     cf_step = CampaignFrameworkStep.objects.get(
         pk=cf_step_id
     )
+
     campaign_step = CampaignStepData.objects.get(
         campaign_id=campaign.id,
         campaign_framework_step_id=cf_step.id
     )
     campaign_step_data = campaign_step.campaign_step_data
 
+    previous_steps = CampaignFrameworkStep.objects.values_list('pk', flat=True).filter(
+        phase_id__in=CampaignFrameworkPhase.objects.only('pk').filter(
+            campaign_framework_id=campaign.campaign_framework_id
+        ),
+        order__lt=cf_step.order,
+        json_layout__contains={"rows":[{"columns":[{"api":{}}]}]}
+    )
+    persisted_objects = CampaignStepData.objects.values('campaign_step_data').filter(
+        pk__in=previous_steps
+    )
+
     data = {
         "campaign": campaign,
         "cf_step": cf_step,
         "json_layout": json.dumps(cf_step.json_layout),
         "campaign_step_data": json.dumps(campaign_step_data),
+        "persisted_objects": json.dumps(list(persisted_objects)),
         "which_normalization_example": campaign_step_data.get('app_1')
     }
     template = loader.get_template("sample_app/" + cf_step.html_layout)
@@ -195,6 +212,43 @@ def create_campaign_pptx(request, campaign_id):
     prs.save(campaign.name + ".pptx")
 
     return HttpResponse("Created")
+
+
+def step_api_call(request, campaign_id, cf_step_id):
+    """
+
+    :param request:
+    :type request:
+    :param campaign_id:
+    :type campaign_id:
+    :param cf_step_id:
+    :type cf_step_id:
+    :return:
+    :rtype:
+    """
+    params = request.GET
+    app = {
+        "value": params.get('return[value]'),
+        "label": params.get('return[label]')
+    }
+
+    from ..views.api_calls import get_audience_explorer_conn
+    base_url = "https://audience.annalect.com/api"
+    url = base_url + "/audience/list/01c22232-76d6-11e9-8de8-0a10e129e67c/449203c6-7ed3-11e8-8b6b-0a35455287ac"
+    response = requests.get(
+        url,
+        cookies=get_audience_explorer_conn(request)
+    )
+    app_data = json.loads(response.text)
+
+    DataClass = DataConnFactory.getDataClass(params.get('system_key'))
+    dataClass = DataClass()
+    data = dataClass.normalize_select_element(app, app_data)
+
+    return HttpResponse(
+        json.dumps(data),
+        content_type="application/json"
+    )
 
 
 def upload_step_html_file(request, campaign_id, cf_step_id):

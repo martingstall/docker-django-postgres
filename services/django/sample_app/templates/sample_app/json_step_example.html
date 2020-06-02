@@ -25,6 +25,7 @@
 <script>
 let jsonObject = JSON.parse('{{ campaign_step_data | escapejs }}');
 let layoutObject = JSON.parse('{{ json_layout | escapejs }}');
+let persistedObjects = JSON.parse('{{ persisted_objects | escapejs }}');
 
 $(function () {
     let $form = $('#campaign_step');
@@ -62,13 +63,34 @@ $(function () {
                 $input.prop('required', true);
             }
 
+            if (column.field_type === "persisted_data") {
+                //console.log(persistedObjects);
+                $.each(persistedObjects[0]['campaign_step_data'], function (a, b) {
+                    if (a === column.name) {
+                        $label.after(b);
+                        $input.attr({
+                            'name': column.name,
+                            'id': column.name,
+                            'type': 'hidden',
+                        }).val(
+                            b
+                        );
+                    }
+                });
+
+                $row.append($col.append($input));
+                return true;
+            }
+
             if (column.field_type === "input") {
                 $input.attr({
                     'name': column.name,
                     'id': column.name,
                     'type': column.input_type,
                     'placeholder': column.placeholder
-                });
+                }).val(
+                    jsonObject[column.name]
+                );
                 $row.append($col.append($input));
                 return true;
             }
@@ -78,9 +100,13 @@ $(function () {
                     let $radioInput = $('<input>', {'type':'radio', 'name':column.name, 'value':radio.value});
                     let $radioLabel = $('<label>');
 
+                    if (jsonObject[column.name] === radio.value) {
+                        $radioInput.prop('checked', true);
+                    }
+
                     $radioLabel.text(radio.label);
                     $radioLabel.prepend($radioInput);
-                    $col.append($radioLabel)
+                    $col.append($radioLabel);
                 });
                 $row.append($col);
                 return true;
@@ -92,11 +118,29 @@ $(function () {
                     'id': column.name,
                 });
 
-                $.each(column.options, function (select_key, select) {
-                    let $option = $('<option>');
-                    $option.attr('value', select.value).text(select.label);
-                    $select.append($option);
-                });
+                if (column.api) {
+                    $.get("{% url 'step_api_call' campaign.id cf_step.id %}", column.api, function (data) {
+                        $.each(data, function (select_key, opt) {
+                            let $option = $('<option>');
+
+                            if (jsonObject[column.name] === opt.value) {
+                                $option.prop('selected', true);
+                            }
+                            $option.attr('value', opt.value).text(opt.label);
+                            $select.append($option);
+                        });
+                    });
+                } else {
+                    $.each(column.options, function (select_key, opt) {
+                        let $option = $('<option>');
+
+                        if (jsonObject[column.name] === opt.value) {
+                            $option.prop('selected', true);
+                        }
+                        $option.attr('value', opt.value).text(opt.label);
+                        $select.append($option);
+                    });
+                }
 
                 $row.append($col.append($select));
                 return true;
@@ -106,7 +150,9 @@ $(function () {
                 $textarea.attr({
                     'name': column.name,
                     'id': column.name,
-                });
+                }).val(
+                    jsonObject[column.name]
+                );
                 $row.append($col.append($textarea));
                 return true;
             }

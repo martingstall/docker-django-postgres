@@ -27,3 +27,24 @@ class Data():
 
     def flattenBarPieData(self, app, raw_data):
         return None
+
+    def normalize_select_element(self, app, raw_data):
+        """
+
+        :param app:
+        :type app:
+        :param raw_data:
+        :type raw_data:
+        :return:
+        :rtype:
+        """
+        normalized_data = []
+
+        for row in raw_data:
+            obj = {
+                "value": row.get(app.get('value')),
+                "label": row.get(app.get('label'))
+            }
+            normalized_data.append(obj)
+
+        return normalized_data

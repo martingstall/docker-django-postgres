@@ -24,6 +24,7 @@ urlpatterns = [
     path('campaign/<int:campaign_id>/step/<int:cf_step_id>/', views.campaign.view_step, name='view_step'),
     path('campaign/<int:campaign_id>/step/<int:cf_step_id>/save/', views.campaign.save_step_data, name='save_step_data'),
     path('campaign/<int:campaign_id>/step/<int:cf_step_id>/html_file/', views.campaign.upload_step_html_file, name='upload_step_html_file'),
+    path('campaign/<int:campaign_id>/step/<int:cf_step_id>/api_call/', views.campaign.step_api_call, name='step_api_call'),
 
     path('app_store/load_app/<int:app_id>/', views.app_store.load_app, name='load_app'),
     path('app_store/create_example/', views.app_store.create_example, name='create_example'),
